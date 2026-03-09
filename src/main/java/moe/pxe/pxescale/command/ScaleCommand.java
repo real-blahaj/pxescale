@@ -8,6 +8,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.selector.EntitySelectorArgumentResolver;
+import moe.pxe.pxescale.Main;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
@@ -17,6 +18,8 @@ import org.bukkit.entity.Entity;
 import java.util.Arrays;
 
 public class ScaleCommand {
+
+    private static final Main PLUGIN_INSTANCE = Main.getInstance();
 
     private static int command(CommandContext<CommandSourceStack> ctx, double scale, Entity[] entities) {
         Entity[] attributableEntities = Arrays.stream(entities)
@@ -58,6 +61,12 @@ public class ScaleCommand {
                                 ctx, ctx.getArgument("scale", Double.class),
                                 new Entity[]{ctx.getSource().getExecutor()}
                                 )))
+                .then(Commands.literal("reload")
+                        .requires(ctx -> ctx.getSender().hasPermission("scale.reload") || ctx.getSender().isOp())
+                        .executes(ctx -> {
+                            PLUGIN_INSTANCE.reloadConfig();
+                            return Command.SINGLE_SUCCESS;
+                        }))
                 .executes(ctx -> command(ctx, 1, new Entity[]{ctx.getSource().getExecutor()}))
                 .build();
     }
