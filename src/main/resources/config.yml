@@ -1,0 +1,20 @@
+#    ██▀▀██ ██  ██ ██▀▀▀▀ ██▀▀██ ██▀▀██ ██▀▀██ ██     ██▀▀▀▀    #
+#    ██▄▄██ ▀▀▄▄▀▀ ██▄▄   ██▄▄▄▄ ██     ██▄▄██ ██     ██▄▄      #
+#    ██     ▄▄▀▀▄▄ ██         ██ ██     ██  ██ ██     ██        #
+#    ██     ██  ██ ██▄▄▄▄ ██▄▄██ ██▄▄██ ██  ██ ██▄▄▄▄ ██▄▄▄▄    #
+# ============================================================= #
+#    pxescale config                                            #
+
+#    Default Minimum Scale                                      #
+#    » The minimum scale players can choose by default.         #
+#    · Different minimums can be given to different players     #
+#    · using `scale.min.<num>`, and operators/those with the    #
+#    · `scale.bypass` permission can bypass the set bounds.     #
+minimum-scale: 0.5
+
+#    Default Maximum Scale                                      #
+#    » The maximum scale players can choose by default.         #
+#    · Different maximums can be given to different players     #
+#    · using `scale.max.<num>`, and operators/those with the    #
+#    · `scale.bypass` permission can bypass the set bounds.     #
+maximum-scale: 1.3

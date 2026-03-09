@@ -1,0 +1,8 @@
+name: pxescale
+version: '1.0'
+main: moe.pxe.pxescale.Main
+api-version: '1.20'
+prefix: Pxestart
+authors: [ pixiboot ]
+description: Adds a /scale command for changing the player's scale
+website: pxe.moe
