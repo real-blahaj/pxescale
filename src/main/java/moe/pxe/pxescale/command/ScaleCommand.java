@@ -16,12 +16,45 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
 
 import java.util.Arrays;
+import java.util.OptionalDouble;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ScaleCommand {
 
     private static final Main PLUGIN_INSTANCE = Main.getInstance();
 
+    private static final Pattern MIN_PERM_FORMAT = Pattern.compile("scale\\.min\\.(?<num>[\\d.]+)");
+    private static final Pattern MAX_PERM_FORMAT = Pattern.compile("scale\\.max\\.(?<num>[\\d.]+)");
+
     private static int command(CommandContext<CommandSourceStack> ctx, double scale, Entity[] entities) {
+
+        double minScale = PLUGIN_INSTANCE.getConfig().getDouble("minimum-scale");
+        double maxScale = PLUGIN_INSTANCE.getConfig().getDouble("maximum-scale");
+
+        if (ctx.getSource().getSender().hasPermission("scale.bypass") || ctx.getSource().getSender().isOp()) {
+            minScale = 0.0625;
+            maxScale = 16.0;
+        } else {
+            OptionalDouble max = ctx.getSource().getSender().getEffectivePermissions().stream()
+                    .map(perm -> MAX_PERM_FORMAT.matcher(perm.getPermission()))
+                    .filter(Matcher::matches)
+                    .map(match -> match.group("num"))
+                    .mapToDouble(Double::valueOf)
+                    .max();
+            if (max.isPresent()) maxScale = max.getAsDouble();
+
+            OptionalDouble min = ctx.getSource().getSender().getEffectivePermissions().stream()
+                    .map(perm -> MIN_PERM_FORMAT.matcher(perm.getPermission()))
+                    .filter(Matcher::matches)
+                    .map(match -> match.group("num"))
+                    .mapToDouble(Double::valueOf)
+                    .max();
+            if (min.isPresent()) minScale = min.getAsDouble();
+        }
+
+        scale = Math.clamp(scale, minScale, maxScale);
+
         Entity[] attributableEntities = Arrays.stream(entities)
                 .filter(e -> e instanceof Attributable)
                 .toList()
