@@ -73,7 +73,7 @@ public class ScaleCommand {
                 Placeholder.unparsed("entities", String.valueOf(attributableEntities.length)),
                 Placeholder.unparsed("scale", String.valueOf(scale)));
         else if (attributableEntities.length == 1) ctx.getSource().getSender().sendRichMessage("Set scale of <entity> to <scale>",
-                Placeholder.component("entity", attributableEntities[0].name()),
+                Placeholder.component("entity", attributableEntities[0].name().hoverEvent(attributableEntities[0].asHoverEvent())),
                 Placeholder.unparsed("scale", String.valueOf(scale)));
         return Command.SINGLE_SUCCESS;
     }
