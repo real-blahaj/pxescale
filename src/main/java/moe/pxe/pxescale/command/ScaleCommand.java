@@ -96,7 +96,7 @@ public class ScaleCommand {
                                 )))
                         .executes(ctx -> command(ctx, 1, new Entity[]{ctx.getSource().getExecutor()})))
                 .requires(ctx -> ctx.getSender().hasPermission("scale.use") || ctx.getSender().isOp())
-                .then(Commands.argument("scale", DoubleArgumentType.doubleArg(0.0625, 16.0))
+                .then(Commands.argument("scale", DoubleArgumentType.doubleArg())
                         .then(Commands.argument("selector", ArgumentTypes.entities())
                                 .requires(ctx -> ctx.getSender().hasPermission("scale.others") || ctx.getSender().isOp())
                                 .executes(ctx -> command(
