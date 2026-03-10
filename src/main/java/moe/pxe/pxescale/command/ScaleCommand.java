@@ -80,6 +80,21 @@ public class ScaleCommand {
 
     public static LiteralCommandNode<CommandSourceStack> getCommand() {
         return Commands.literal("scale")
+                .then(Commands.literal("reload")
+                        .requires(ctx -> ctx.getSender().hasPermission("scale.reload") || ctx.getSender().isOp())
+                        .executes(ctx -> {
+                            PLUGIN_INSTANCE.reloadConfig();
+                            return Command.SINGLE_SUCCESS;
+                        }))
+                .then(Commands.literal("reset")
+                        .then(Commands.argument("selector", ArgumentTypes.entities())
+                                .requires(ctx -> ctx.getSender().hasPermission("scale.others") || ctx.getSender().isOp())
+                                .executes(ctx -> command(
+                                        ctx, 1, ctx.getArgument("selector", EntitySelectorArgumentResolver.class)
+                                                .resolve(ctx.getSource())
+                                                .toArray(new Entity[]{})
+                                )))
+                        .executes(ctx -> command(ctx, 1, new Entity[]{ctx.getSource().getExecutor()})))
                 .requires(ctx -> ctx.getSender().hasPermission("scale.use") || ctx.getSender().isOp())
                 .then(Commands.argument("scale", DoubleArgumentType.doubleArg(0.0625, 16.0))
                         .then(Commands.argument("selector", ArgumentTypes.entities())
@@ -94,12 +109,6 @@ public class ScaleCommand {
                                 ctx, ctx.getArgument("scale", Double.class),
                                 new Entity[]{ctx.getSource().getExecutor()}
                                 )))
-                .then(Commands.literal("reload")
-                        .requires(ctx -> ctx.getSender().hasPermission("scale.reload") || ctx.getSender().isOp())
-                        .executes(ctx -> {
-                            PLUGIN_INSTANCE.reloadConfig();
-                            return Command.SINGLE_SUCCESS;
-                        }))
                 .executes(ctx -> command(ctx, 1, new Entity[]{ctx.getSource().getExecutor()}))
                 .build();
     }
