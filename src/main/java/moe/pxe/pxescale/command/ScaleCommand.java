@@ -84,6 +84,7 @@ public class ScaleCommand {
                         .requires(ctx -> ctx.getSender().hasPermission("scale.reload") || ctx.getSender().isOp())
                         .executes(ctx -> {
                             PLUGIN_INSTANCE.reloadConfig();
+                            ctx.getSource().getSender().sendRichMessage("Reloaded configuration");
                             return Command.SINGLE_SUCCESS;
                         }))
                 .then(Commands.literal("reset")
