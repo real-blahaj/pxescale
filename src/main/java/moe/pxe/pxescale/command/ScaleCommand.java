@@ -105,6 +105,13 @@ public class ScaleCommand {
                                                 .resolve(ctx.getSource())
                                                 .toArray(new Entity[]{})
                                         )))
+                        .suggests((ctx, builder) -> {
+                            if (ctx.getSource().getExecutor() instanceof final Attributable att) {
+                                AttributeInstance scaleAttribute = att.getAttribute(Attribute.GENERIC_SCALE);
+                                if (scaleAttribute != null) builder.suggest(String.valueOf(scaleAttribute.getBaseValue()));
+                            }
+                            return builder.buildFuture();
+                        })
                         .executes(ctx -> command(
                                 ctx, ctx.getArgument("scale", Double.class),
                                 new Entity[]{ctx.getSource().getExecutor()}
